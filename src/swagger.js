@@ -1,6 +1,3 @@
-const swaggerJSDoc = require("swagger-jsdoc");
-
-// Swagger Configuration
 const swaggerDefinition = {
   openapi: "3.0.0",
   info: {
@@ -13,6 +10,20 @@ const swaggerDefinition = {
       url: "http://localhost:3000",
     },
   ],
+  components: {
+    securitySchemes: {
+      BearerAuth: {
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+      },
+    },
+  },
+  security: [
+    {
+      BearerAuth: [],
+    },
+  ],
 };
 
 const swaggerOptions = {
@@ -20,6 +31,6 @@ const swaggerOptions = {
   apis: ["./src/routes/*.js"],
 };
 
-const swaggerSpec = swaggerJSDoc(swaggerOptions);
+const swaggerSpec = require("swagger-jsdoc")(swaggerOptions);
 
 module.exports = swaggerSpec;
