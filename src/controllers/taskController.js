@@ -2,7 +2,31 @@ const { readTasksFromFile, writeTasksToFile } = require('../utils/fileHelper');
 
 exports.getAllTasks = (req, res) => {
   const tasks = readTasksFromFile();
-  res.json(tasks);
+
+  // Get pagination parameters from query string
+  let { page, limit } = req.query;
+
+  // Convert query params to integers and set default values if not provided
+  page = parseInt(page) || 1;
+  limit = parseInt(limit) || 10;
+
+  // Calculate the start and end index for slicing
+  const startIndex = (page - 1) * limit;
+  const endIndex = startIndex + limit;
+
+  // Paginate the tasks array
+  const paginatedTasks = tasks.slice(startIndex, endIndex);
+
+  // Create response with pagination metadata
+  const totalPages = Math.ceil(tasks.length / limit);
+
+  res.json({
+    page,
+    limit,
+    totalTasks: tasks.length,
+    totalPages,
+    data: paginatedTasks,
+  });
 };
 
 exports.getTaskById = (req, res) => {

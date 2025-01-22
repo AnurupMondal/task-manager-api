@@ -13,26 +13,52 @@ const router = express.Router();
  * @swagger
  * /tasks:
  *   get:
- *     summary: Get all tasks
- *     description: Retrieve a list of all tasks.
+ *     summary: Get all tasks with pagination
+ *     description: Retrieve a list of tasks with pagination support.
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: The page number.
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: The number of tasks per page.
  *     responses:
  *       200:
- *         description: A list of tasks.
+ *         description: A paginated list of tasks.
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   title:
- *                     type: string
- *                   description:
- *                     type: string
- *                   status:
- *                     type: string
+ *               type: object
+ *               properties:
+ *                 page:
+ *                   type: integer
+ *                 limit:
+ *                   type: integer
+ *                 totalTasks:
+ *                   type: integer
+ *                 totalPages:
+ *                   type: integer
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                       title:
+ *                         type: string
+ *                       description:
+ *                         type: string
+ *                       status:
+ *                         type: string
+ *       400:
+ *         description: Invalid query parameters
  *       500:
  *         description: Internal server error
  */

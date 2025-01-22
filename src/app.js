@@ -11,14 +11,14 @@ const app = express();
 // Middleware
 app.use(jsonParser);
 
+// Exclude Swagger UI from authentication
+app.use("/api/tasks/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 // Authentication routes
 app.use("/api/auth", authRoutes);
 
-// Protected task routes
+// Protect other API routes with JWT
 app.use("/api", authenticateToken, taskRoutes);
-
-// Swagger documentation
-app.use("/api/tasks/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
