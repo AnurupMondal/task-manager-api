@@ -6,8 +6,49 @@ const {
   updateTask,
   deleteTask,
 } = require('../controllers/taskController');
+const { login } = require('../controllers/authController'); // Assuming the login function exists in authController.js
 
 const router = express.Router();
+
+/**
+ * @swagger
+ * /auth/login:
+ *   post:
+ *     summary: User login
+ *     description: Authenticate a user and return a JWT token.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - username
+ *               - password
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 example: "admin"
+ *               password:
+ *                 type: string
+ *                 example: "password123"
+ *     responses:
+ *       200:
+ *         description: Successfully authenticated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+ *       401:
+ *         description: Unauthorized - Invalid credentials
+ *       400:
+ *         description: Bad request - Missing required fields
+ */
+router.post('/auth/login', login);
 
 /**
  * @swagger

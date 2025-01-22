@@ -6,7 +6,7 @@ const swaggerDefinition = {
   info: {
     title: "Task Manager API",
     version: "1.0.0",
-    description: "API documentation for the Task Manager application",
+    description: "API documentation for the Task Manager application with JWT authentication.",
   },
   servers: [
     {
@@ -19,6 +19,7 @@ const swaggerDefinition = {
         type: "http",
         scheme: "bearer",
         bearerFormat: "JWT",
+        description: "Enter your JWT token in the format: Bearer <token>",
       },
     },
   },
@@ -31,7 +32,7 @@ const swaggerDefinition = {
 
 const swaggerOptions = {
   swaggerDefinition,
-  apis: ["./src/routes/*.js"],
+  apis: ["./src/routes/*.js"], // Update based on your actual path to route files
 };
 
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
