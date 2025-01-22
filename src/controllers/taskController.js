@@ -1,86 +1,86 @@
-const { readTasksFromFile, writeTasksToFile } = require('../utils/fileHelper');
+const Task = require("../models/taskModel");
 
-exports.getAllTasks = (req, res) => {
-  const tasks = readTasksFromFile();
+// Get all tasks with pagination
+exports.getAllTasks = async (req, res) => {
+  try {
+    let { page, limit } = req.query;
+    page = parseInt(page) || 1;
+    limit = parseInt(limit) || 10;
 
-  // Get pagination parameters from query string
-  let { page, limit } = req.query;
+    const tasks = await Task.find()
+      .skip((page - 1) * limit)
+      .limit(limit);
 
-  // Convert query params to integers and set default values if not provided
-  page = parseInt(page) || 1;
-  limit = parseInt(limit) || 10;
-
-  // Calculate the start and end index for slicing
-  const startIndex = (page - 1) * limit;
-  const endIndex = startIndex + limit;
-
-  // Paginate the tasks array
-  const paginatedTasks = tasks.slice(startIndex, endIndex);
-
-  // Create response with pagination metadata
-  const totalPages = Math.ceil(tasks.length / limit);
-
-  res.json({
-    page,
-    limit,
-    totalTasks: tasks.length,
-    totalPages,
-    data: paginatedTasks,
-  });
-};
-
-exports.getTaskById = (req, res) => {
-  const tasks = readTasksFromFile();
-  const task = tasks.find(t => t.id === parseInt(req.params.id));
-  if (!task) return res.status(404).json({ error: "Task not found" });
-  res.json(task);
-};
-
-exports.createTask = (req, res) => {
-  const { title, description, status } = req.body;
-  if (!title || !description || !status) {
-    return res.status(400).json({ error: "All fields are required" });
+    const totalTasks = await Task.countDocuments();
+    res.json({
+      page,
+      limit,
+      totalTasks,
+      totalPages: Math.ceil(totalTasks / limit),
+      data: tasks,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
   }
-
-  const tasks = readTasksFromFile();
-  const newTask = {
-    id: tasks.length > 0 ? tasks[tasks.length - 1].id + 1 : 1,
-    title,
-    description,
-    status,
-    created_at: new Date(),
-    updated_at: new Date(),
-  };
-
-  tasks.push(newTask);
-  writeTasksToFile(tasks);
-  res.status(201).json(newTask);
 };
 
-exports.updateTask = (req, res) => {
-  const tasks = readTasksFromFile();
-  const taskIndex = tasks.findIndex(t => t.id === parseInt(req.params.id));
-  if (taskIndex === -1) return res.status(404).json({ error: "Task not found" });
-
-  const { title, description, status } = req.body;
-  tasks[taskIndex] = {
-    ...tasks[taskIndex],
-    title: title || tasks[taskIndex].title,
-    description: description || tasks[taskIndex].description,
-    status: status || tasks[taskIndex].status,
-    updated_at: new Date(),
-  };
-
-  writeTasksToFile(tasks);
-  res.json(tasks[taskIndex]);
+// Get a task by ID
+exports.getTaskById = async (req, res) => {
+  try {
+    const task = await Task.findById(req.params.id);
+    if (!task) return res.status(404).json({ error: "Task not found" });
+    res.json(task);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
-exports.deleteTask = (req, res) => {
-  let tasks = readTasksFromFile();
-  const taskIndex = tasks.findIndex(t => t.id === parseInt(req.params.id));
-  if (taskIndex === -1) return res.status(404).json({ error: "Task not found" });
+// Create a new task
+exports.createTask = async (req, res) => {
+  try {
+    const { title, description, status } = req.body;
+    if (!title || !description || !status) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
 
-  tasks = tasks.filter(t => t.id !== parseInt(req.params.id));
-  writeTasksToFile(tasks);
-  res.json({ message: "Task deleted successfully" });
+    const newTask = new Task({
+      title,
+      description,
+      status,
+    });
+
+    await newTask.save();
+    res.status(201).json(newTask);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+// Update a task
+exports.updateTask = async (req, res) => {
+  try {
+    const { title, description, status } = req.body;
+    const updatedTask = await Task.findByIdAndUpdate(
+      req.params.id,
+      { title, description, status, updated_at: Date.now() },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedTask) return res.status(404).json({ error: "Task not found" });
+
+    res.json(updatedTask);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+// Delete a task
+exports.deleteTask = async (req, res) => {
+  try {
+    const deletedTask = await Task.findByIdAndDelete(req.params.id);
+    if (!deletedTask) return res.status(404).json({ error: "Task not found" });
+    res.json({ message: "Task deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };

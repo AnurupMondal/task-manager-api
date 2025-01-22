@@ -50,13 +50,15 @@ const router = express.Router();
  *                     type: object
  *                     properties:
  *                       id:
- *                         type: integer
+ *                         type: string
  *                       title:
  *                         type: string
  *                       description:
  *                         type: string
  *                       status:
  *                         type: string
+ *                         enum: [pending, in-progress, completed]
+ *                         description: The status of the task.
  *       400:
  *         description: Invalid query parameters
  *       500:
@@ -76,7 +78,7 @@ router.get('/tasks', getAllTasks);
  *         required: true
  *         description: The ID of the task to retrieve.
  *         schema:
- *           type: integer
+ *           type: string
  *     responses:
  *       200:
  *         description: The task details.
@@ -86,13 +88,14 @@ router.get('/tasks', getAllTasks);
  *               type: object
  *               properties:
  *                 id:
- *                   type: integer
+ *                   type: string
  *                 title:
  *                   type: string
  *                 description:
  *                   type: string
  *                 status:
  *                   type: string
+ *                   enum: [pending, in-progress, completed]
  *       404:
  *         description: Task not found
  *       500:
@@ -105,7 +108,7 @@ router.get('/tasks/:id', getTaskById);
  * /tasks:
  *   post:
  *     summary: Create a new task
- *     description: Add a new task to the list.
+ *     description: Add a new task to the list. (status can be pending, in-progress or completed)
  *     requestBody:
  *       required: true
  *       content:
@@ -115,6 +118,7 @@ router.get('/tasks/:id', getTaskById);
  *             required:
  *               - title
  *               - description
+ *               - status
  *             properties:
  *               title:
  *                 type: string
@@ -122,6 +126,8 @@ router.get('/tasks/:id', getTaskById);
  *                 type: string
  *               status:
  *                 type: string
+ *                 enum: [pending, in-progress, completed]
+ *                 description: The status of the task.
  *     responses:
  *       201:
  *         description: Task created successfully.
@@ -144,7 +150,7 @@ router.post('/tasks', createTask);
  *         required: true
  *         description: The ID of the task to update.
  *         schema:
- *           type: integer
+ *           type: string
  *     requestBody:
  *       required: true
  *       content:
@@ -158,6 +164,8 @@ router.post('/tasks', createTask);
  *                 type: string
  *               status:
  *                 type: string
+ *                 enum: [pending, in-progress, completed]
+ *                 description: The status of the task.
  *     responses:
  *       200:
  *         description: Task updated successfully.
@@ -182,7 +190,7 @@ router.put('/tasks/:id', updateTask);
  *         required: true
  *         description: The ID of the task to delete.
  *         schema:
- *           type: integer
+ *           type: string
  *     responses:
  *       204:
  *         description: Task deleted successfully.
