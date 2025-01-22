@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "id": 1,
+    "title": "New Task",
+    "description": "Task details",
+    "status": "Pending",
+    "created_at": "2025-01-22T05:12:18.483Z",
+    "updated_at": "2025-01-22T05:12:18.483Z"
+  },
+  {
+    "id": 2,
+    "title": "New Task",
+    "description": "Task details",
+    "status": "Pending",
+    "created_at": "2025-01-22T06:52:44.986Z",
+    "updated_at": "2025-01-22T06:52:44.986Z"
+  }
+]
