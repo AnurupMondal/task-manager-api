@@ -2,6 +2,8 @@
 
 Task Manager API is a simple RESTful API that allows users to manage tasks efficiently with CRUD operations. The API is built using **Node.js**, **Express.js**, and **MongoDB**, with JWT-based authentication and Swagger documentation.
 
+![image](https://github.com/user-attachments/assets/e4eef6fe-6d27-4980-b2f1-f8ee7967273e)
+
 ---
 
 ## Features
