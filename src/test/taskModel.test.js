@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Task = require("../../src/models/taskModel");
+const Task = require("../models/taskModel");
 
 describe("Task Model", () => {
   beforeAll(async () => {

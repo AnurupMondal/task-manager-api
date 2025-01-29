@@ -1,6 +1,6 @@
 const request = require("supertest");
 const express = require("express");
-const jsonParser = require("../../src/middlewares/jsonParser");
+const jsonParser = require("../middlewares/jsonParser");
 
 const app = express();
 app.use(jsonParser);

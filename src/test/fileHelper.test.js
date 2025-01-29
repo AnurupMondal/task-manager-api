@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const fileHelper = require("../../src/utils/fileHelper");
+const fileHelper = require("../utils/fileHelper");
 
 jest.mock("fs"); // Mock fs module to avoid actual file operations
 

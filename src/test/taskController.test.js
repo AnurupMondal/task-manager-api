@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const Task = require("../models/taskModel");
 const taskController = require("../controllers/taskController");
 
-jest.mock("../../src/models/taskModel"); // Mock Mongoose model
+jest.mock("../models/taskModel"); // Mock Mongoose model
 
 const app = express();
 app.use(express.json());

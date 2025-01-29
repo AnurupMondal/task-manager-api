@@ -1,6 +1,6 @@
 const request = require("supertest");
 const express = require("express");
-const authRoutes = require("../../src/routes/authRoutes");
+const authRoutes = require("../routes/authRoutes");
 const jwt = require("jsonwebtoken");
 
 jest.mock("jsonwebtoken"); // Mock JWT to avoid real token signing

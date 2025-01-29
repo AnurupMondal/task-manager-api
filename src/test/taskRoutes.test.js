@@ -1,7 +1,7 @@
 const request = require("supertest");
 const mongoose = require("mongoose");
-const app = require("../../src/app");
-const Task = require("../../src/models/taskModel");
+const app = require("../app");
+const Task = require("../models/taskModel");
 
 describe("Task Routes", () => {
   let taskId;

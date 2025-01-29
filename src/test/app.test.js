@@ -1,5 +1,5 @@
 const request = require("supertest");
-const app = require("../src/app");
+const app = require("../app");
 
 describe("Task Manager API", () => {
   test("Server should be running", async () => {
